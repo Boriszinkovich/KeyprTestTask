@@ -50,7 +50,10 @@ extension MainVCPresenter: MainVCPresenterProtocol {
     }
     
     func onRefresh() {
-        _ = self.weatherService!.forceLoadWeather()
+        let isLoading = self.weatherService!.forceLoadWeather()
+        if !isLoading && !NetworkManager.isReachable() {
+            self.mainVC?.endWeatherRefreshing()
+        }
     }
     
     func getCitiesCount() -> Int {
