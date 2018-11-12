@@ -26,9 +26,27 @@ class KeyprTestTaskUITests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
-    func testExample() {
-        // Use recording to get started writing UI tests.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    func testSimpleLaunch() {
+        let element = XCUIApplication().otherElements[UIAccessibilityIdentifiers.keyMainVCId]
+        waitForElementAppearance(interval: 5, element: element)
+        XCTAssertTrue(element.exists)
+        // check if three cities are on the screen
+        let cells = XCUIApplication().cells.matching(identifier: UIAccessibilityIdentifiers.keyMainVCCellId)
+        XCTAssertTrue(cells.count == 3)
+        // wait until data will be loaded
+        // TODO: replace sleep with waitForPredicate
+        sleep(5)
+        let cell = cells.firstMatch
+        let temp = cell.staticTexts[UIAccessibilityIdentifiers.keyTemperatureLabelId].firstMatch
+        XCTAssertTrue(temp.exists)
+        let tempValue = temp.label
+        XCTAssertFalse(tempValue == "-||-" || tempValue == "")
     }
-
+    
+    func waitForElementAppearance(interval: TimeInterval, element: XCUIElement) {
+        let predicate = NSPredicate(format: "exists == 1")
+        expectation(for: predicate, evaluatedWith: element, handler: nil)
+        
+        waitForExpectations(timeout: interval, handler: nil)
+    }
 }
