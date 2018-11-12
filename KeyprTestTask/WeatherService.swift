@@ -54,7 +54,7 @@ class WeatherService: NSObject, WeatherServiceProtocol {
             self.loadWeatherData()
             return true
         }
-        let updateInterval: TimeInterval = 3 * 5 // 5 minutes
+        let updateInterval: TimeInterval = 60 * 5 // 5 minutes
         if Date().timeIntervalSince(lastUpdateDate) > updateInterval {
             self.loadWeatherData()
             return true
